@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkinHouse — Лидерборд</title>
+  <title>SkinHouse — Кейc</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-page="leaderboard">
+<body data-page="case">
   <div class="app-shell">
     <header class="app-header">
       <a class="logo" href="index.html">Skin<span>House</span></a>
@@ -42,28 +42,42 @@
     </header>
 
     <main>
-      <section class="hero compact">
+      <section class="case-hero" id="caseHero">
         <div>
-          <p class="eyebrow">Топ открывателей</p>
-          <h1>Лидеры недели и глобальный XP рейтинг</h1>
-          <p class="muted">Следите за игроками с самым высоким опытом и количеством премиальных выпадений.</p>
+          <p class="eyebrow" id="caseTag">Кейс</p>
+          <h1 id="caseName">—</h1>
+          <p class="muted" id="caseDescription">Полное описание кейса и коллекции.</p>
+          <div class="case-meta">
+            <div>
+              <small>Стоимость</small>
+              <strong id="casePrice">₽0.00</strong>
+            </div>
+            <div>
+              <small>XP за открытие</small>
+              <strong id="caseXp">0</strong>
+            </div>
+            <div>
+              <small>Режим</small>
+              <strong id="caseFrequency">—</strong>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="btn primary" id="openCaseBtn" disabled>Открыть кейс</button>
+            <button class="btn ghost" onclick="window.location.href='index.html'">К каталогу</button>
+          </div>
         </div>
+        <div class="case-preview" id="casePreview"></div>
       </section>
 
-      <section class="panel leaderboard-panel">
-        <div class="leaderboard" id="leaderboardList"></div>
-        <aside class="leaderboard-side">
-          <div class="stat-card">
-            <p class="muted">Ваш уровень</p>
-            <h3 id="lbLevel">1</h3>
-            <p class="muted" id="lbXp">0 XP</p>
+      <section class="drop-panel">
+        <header class="section-head">
+          <div>
+            <p class="eyebrow">Весь дроп</p>
+            <h2>Лут в кейсе</h2>
           </div>
-          <div class="stat-card">
-            <p class="muted">Позиция</p>
-            <h3 id="lbRank">—</h3>
-            <small>Обновляется автоматически</small>
-          </div>
-        </aside>
+          <input type="search" id="dropSearch" placeholder="Поиск по скину" />
+        </header>
+        <div class="drop-grid" id="dropGrid"></div>
       </section>
     </main>
 

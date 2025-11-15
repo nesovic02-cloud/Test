@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkinHouse — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="admin">
+  <div class="admin-shell">
+    <div class="admin-card" id="adminLogin">
+      <h1>Admin панель</h1>
+      <p class="muted">Введите логин и пароль для доступа к настройкам кейсов.</p>
+      <form id="adminLoginForm" class="modal-form">
+        <label>Логин<input type="text" id="adminLoginInput" required /></label>
+        <label>Пароль<input type="password" id="adminPasswordInput" required /></label>
+        <button class="btn primary" type="submit">Войти</button>
+      </form>
+    </div>
+
+    <div class="admin-dashboard hidden" id="adminDashboard">
+      <header>
+        <div>
+          <h1>Управление кейсами</h1>
+          <p class="muted">Настраивайте шансы, цены и состав дропа. Изменения сразу применяются на сайте.</p>
+        </div>
+        <div class="admin-actions">
+          <button class="btn ghost" id="refreshCatalog">Обновить цены из каталога</button>
+          <button class="btn secondary" id="adminLogout">Выйти</button>
+        </div>
+      </header>
+
+      <section class="admin-grid">
+        <aside>
+          <label>Выберите кейс
+            <select id="adminCaseSelect"></select>
+          </label>
+          <label>Название<input type="text" id="adminCaseName" /></label>
+          <label>Цена<input type="number" id="adminCasePrice" min="1" step="1" /></label>
+          <label>XP за открытие<input type="number" id="adminCaseXp" min="1" step="1" /></label>
+          <label>Частота выпадений
+            <select id="adminCaseFrequency">
+              <option value="balanced">Сбалансированный</option>
+              <option value="fast">Частый</option>
+              <option value="rare">Редкий</option>
+            </select>
+          </label>
+          <label>Описание<textarea id="adminCaseDescription"></textarea></label>
+          <button class="btn primary" id="saveCase">Сохранить изменения</button>
+        </aside>
+        <div class="admin-drops">
+          <div class="admin-drops-head">
+            <h3>Дроп кейса</h3>
+            <button class="btn ghost" id="addDropBtn">Добавить скин</button>
+          </div>
+          <div class="admin-drop-list" id="adminDropList"></div>
+        </div>
+      </section>
+
+      <section class="admin-catalog" id="catalogPanel">
+        <header>
+          <h3>Каталог CS2</h3>
+          <input type="search" id="catalogSearch" placeholder="Поиск по оружию или названию" />
+        </header>
+        <div class="catalog-grid" id="catalogGrid"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="script.js"></script>
+</body>
+</html>

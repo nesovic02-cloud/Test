@@ -6,13 +6,13 @@
   <title>SkinHouse — Розыгрыши</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="giveaways">
   <div class="app-shell">
     <header class="app-header">
-      <div class="logo">Skin<span>House</span></div>
+      <a class="logo" href="index.html">Skin<span>House</span></a>
       <nav class="main-nav">
         <a href="index.html" data-page="cases">Кейсы</a>
         <a href="leaderboard.html" data-page="leaderboard">Лидеры</a>
@@ -21,33 +21,38 @@
         <a href="profile.html" data-page="profile">Профиль</a>
       </nav>
       <div class="header-actions">
-        <button class="btn ghost" id="depositBtn">Пополнить</button>
-        <button class="user-chip" type="button" id="accountManager">
-          <span class="status online"></span>
+        <div class="balance-chip">
           <div>
-            <p class="user-name" id="headerUser">nox</p>
+            <small>Баланс</small>
+            <strong id="headerBalance">₽0.00</strong>
+          </div>
+          <button class="btn primary" id="depositBtn">Пополнить</button>
+        </div>
+        <button class="icon-btn" id="logoutBtn" title="Выйти из аккаунта">
+          <span class="icon icon-logout"></span>
+        </button>
+        <button class="user-chip" type="button" id="accountManager">
+          <img id="headerAvatar" src="https://avatars.githubusercontent.com/u/1?v=4" alt="avatar" />
+          <div>
+            <p class="user-name" id="headerUser">Гость</p>
             <small id="userExp">0 XP</small>
           </div>
-          <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="avatar" />
         </button>
       </div>
     </header>
 
     <main>
-      <section class="panel giveaway-page">
-        <header class="section-head">
-          <div>
-            <p class="eyebrow">Каждый час новый приз</p>
-            <h1>$11 440 призового фонда прямо сейчас</h1>
-          </div>
-          <div class="filters">
-            <button class="chip active">Все</button>
-            <button class="chip">VIP</button>
-            <button class="chip">Для новичков</button>
-          </div>
-        </header>
+      <section class="hero compact">
+        <div>
+          <p class="eyebrow">Live розыгрыши</p>
+          <h1>Бесплатные скины и предметы за активность</h1>
+          <p class="muted">Выбирайте тариф розыгрыша, участвуйте одним кликом и следите за обратным отсчётом.</p>
+        </div>
+      </section>
+
+      <section class="panel">
         <div class="giveaway-grid" id="giveawayGrid"></div>
-        <div class="winners" id="winnersLog"></div>
+        <div class="giveaway-log" id="winnersLog"></div>
       </section>
     </main>
 
@@ -55,45 +60,36 @@
       <p>© 2025 SkinHouse. Все права защищены.</p>
       <div class="footer-links">
         <a href="#">Пользовательское соглашение</a>
-        <a href="#">Служба поддержки</a>
+        <a href="#">Поддержка</a>
       </div>
     </footer>
   </div>
 
   <div class="modal" id="accountModal" aria-hidden="true">
-    <div class="modal-content">
+    <div class="modal-content large">
       <button class="modal-close" data-close-modal>&times;</button>
-      <h3>Управление аккаунтом</h3>
-      <p class="muted">Создавайте аккаунты, сохраняйте прогресс и переключайтесь за один клик.</p>
+      <h3>Аккаунт</h3>
+      <p class="muted">Войдите через Steam или создайте локальный аккаунт.</p>
       <div class="modal-tabs" role="tablist">
-        <button class="chip active" data-tab="login">Войти</button>
+        <button class="chip active" data-tab="steam">Steam</button>
+        <button class="chip" data-tab="login">Логин</button>
         <button class="chip" data-tab="register">Регистрация</button>
       </div>
-      <form id="loginForm" class="modal-form" autocomplete="off">
-        <label>
-          Никнейм
-          <input type="text" id="loginName" required placeholder="Например, nox" />
-        </label>
-        <label>
-          Пароль
-          <input type="password" id="loginPassword" required placeholder="••••••" />
-        </label>
+      <form id="steamForm" class="modal-form">
+        <label>Steam ID<input type="text" id="steamProfile" required /></label>
+        <label>Ник<input type="text" id="steamNick" required /></label>
+        <button class="btn primary" type="submit">Авторизоваться через Steam</button>
+      </form>
+      <form id="loginForm" class="modal-form hidden" autocomplete="off">
+        <label>Никнейм<input type="text" id="loginName" required /></label>
+        <label>Пароль<input type="password" id="loginPassword" required /></label>
         <button class="btn primary" type="submit">Войти</button>
       </form>
       <form id="registerForm" class="modal-form hidden" autocomplete="off">
-        <label>
-          Никнейм
-          <input type="text" id="registerName" required minlength="3" maxlength="16" />
-        </label>
-        <label>
-          Пароль
-          <input type="password" id="registerPassword" required minlength="4" />
-        </label>
-        <label>
-          Подтверждение
-          <input type="password" id="registerConfirm" required minlength="4" />
-        </label>
-        <button class="btn primary" type="submit">Создать</button>
+        <label>Никнейм<input type="text" id="registerName" required minlength="3" /></label>
+        <label>Пароль<input type="password" id="registerPassword" required minlength="4" /></label>
+        <label>Повтор<input type="password" id="registerConfirm" required minlength="4" /></label>
+        <button class="btn primary" type="submit">Создать аккаунт</button>
       </form>
       <div class="account-list" id="accountList"></div>
     </div>
@@ -103,30 +99,33 @@
     <div class="modal-content">
       <button class="modal-close" data-close-modal>&times;</button>
       <h3>Пополнение баланса</h3>
-      <p class="muted">Выберите сумму и способ оплаты. Поддерживаем карты, крипту и скины.</p>
       <form id="depositForm" class="modal-form">
-        <label>
-          Сумма
-          <input type="number" id="depositAmount" min="5" step="5" placeholder="50" />
-        </label>
-        <label>
-          Способ оплаты
+        <label>Сумма<input type="number" id="depositAmount" min="5" step="5" value="100" /></label>
+        <label>Способ
           <select id="depositMethod">
-            <option value="card">Банковская карта</option>
-            <option value="crypto">Криптовалюта</option>
-            <option value="skin">Скины</option>
+            <option value="card">Карта</option>
+            <option value="qiwi">QIWI</option>
+            <option value="crypto">Crypto</option>
           </select>
-        </label>
-        <label>
-          Комментарий или промокод
-          <input type="text" id="depositComment" placeholder="Например, drop50" />
         </label>
         <button class="btn primary" type="submit">Пополнить</button>
       </form>
-      <p class="muted" id="depositHint">Мгновенная обработка 24/7</p>
     </div>
   </div>
 
-  <script src="script.js" type="module"></script>
+  <div class="case-spinner" id="caseSpinner" aria-hidden="true">
+    <div class="spinner-content">
+      <button class="modal-close" data-close-spinner>&times;</button>
+      <div class="spinner-track-wrapper">
+        <div class="spinner-track" id="spinnerTrack"></div>
+        <div class="spinner-pointer"></div>
+      </div>
+      <div class="spinner-result" id="spinnerResult"></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
