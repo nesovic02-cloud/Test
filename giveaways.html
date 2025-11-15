@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkinHouse — Кейсы CS2</title>
+  <title>SkinHouse — Розыгрыши</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-page="cases">
+<body data-page="giveaways">
   <div class="app-shell">
     <header class="app-header">
       <div class="logo">Skin<span>House</span></div>
@@ -34,56 +34,20 @@
     </header>
 
     <main>
-      <section class="hero" id="cases">
-        <div>
-          <p class="eyebrow">Открой кейс и получи опыт</p>
-          <h1>Коллекции CS2 с мгновенным апгрейдом</h1>
-          <p class="muted">Современный интерфейс, живой онлайн и прозрачная экономика. Мы создаём продукт в духе skinhouse.gg и skinbox, но с собственной экосистемой аккаунтов и прогресса.</p>
-          <div class="hero-actions">
-            <button class="btn primary" id="openRandom">Открыть случайный кейс</button>
-            <button class="btn secondary">Каталог кейсов</button>
-          </div>
-        </div>
-        <div class="hero-card">
-          <h3>Прогресс опыта</h3>
-          <p>Открывайте кейсы, чтобы попасть в топ игроков.</p>
-          <div class="progress">
-            <span id="expProgress"></span>
-          </div>
-          <div class="hero-stats">
-            <div>
-              <small>Текущий уровень</small>
-              <p id="userLevel">1</p>
-            </div>
-            <div>
-              <small>Опыта до следующего</small>
-              <p id="nextLevel">100</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="case-grid-wrapper">
-        <header class="section-head">
-          <h2>Фирменные кейсы</h2>
-          <div class="filters">
-            <button class="chip active">Топовые</button>
-            <button class="chip">Новые</button>
-            <button class="chip">Коллекции CS2</button>
-          </div>
-        </header>
-        <div class="case-grid" id="caseGrid"></div>
-      </section>
-
-      <section class="panel live-feed-panel">
+      <section class="panel giveaway-page">
         <header class="section-head">
           <div>
-            <p class="eyebrow">Онлайн</p>
-            <h2>Живая лента дропа</h2>
+            <p class="eyebrow">Каждый час новый приз</p>
+            <h1>$11 440 призового фонда прямо сейчас</h1>
           </div>
-          <p class="muted">Следи, кто и из какого кейса забирает топовый лут.</p>
+          <div class="filters">
+            <button class="chip active">Все</button>
+            <button class="chip">VIP</button>
+            <button class="chip">Для новичков</button>
+          </div>
         </header>
-        <div class="live-feed" id="liveFeed"></div>
+        <div class="giveaway-grid" id="giveawayGrid"></div>
+        <div class="winners" id="winnersLog"></div>
       </section>
     </main>
 

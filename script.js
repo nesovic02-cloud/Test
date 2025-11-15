@@ -114,6 +114,7 @@ const winnersLog = document.getElementById('winnersLog');
 const upgradeInventory = document.getElementById('upgradeInventory');
 const upgradePool = document.getElementById('upgradePool');
 const profileInventory = document.getElementById('profileInventory');
+const liveFeed = document.getElementById('liveFeed');
 const chanceRange = document.getElementById('chanceRange');
 const chanceValue = document.getElementById('chanceValue');
 const upgradeBtn = document.getElementById('upgradeBtn');
@@ -129,6 +130,7 @@ const profileId = document.getElementById('profileId');
 const headerUser = document.getElementById('headerUser');
 const sellAllBtn = document.getElementById('sellAll');
 const openRandomBtn = document.getElementById('openRandom');
+const navLinks = document.querySelectorAll('.main-nav a');
 const accountModal = document.getElementById('accountModal');
 const depositModal = document.getElementById('depositModal');
 const accountManagerBtn = document.getElementById('accountManager');
@@ -153,6 +155,25 @@ const userLevel = document.getElementById('userLevel');
 const nextLevel = document.getElementById('nextLevel');
 
 let selectedItem = null;
+const pageId = document.body.dataset.page || 'cases';
+
+navLinks.forEach((link) => {
+  if (link.dataset.page === pageId) {
+    link.classList.add('active');
+  }
+});
+
+const liveNames = ['nox', 's1mple', 'cXtion', 'milli0nn', 'vapor', 'denzed', 'stalker', 'arizona', 'natality'];
+const liveSkins = [
+  'AK-47 | Headshot',
+  'M4A4 | Temukau',
+  'AWP | Chromatic Aberration',
+  'USP-S | Printstream',
+  'Karambit | Doppler',
+  'Glock-18 | Water Elemental',
+  'Desert Eagle | Printstream',
+  'AK-47 | Slate',
+];
 
 function persistState() {
   accounts[currentAccountId] = JSON.parse(JSON.stringify(userState));
@@ -206,6 +227,7 @@ function getTradeLink() {
 }
 
 function renderCases() {
+  if (!caseGrid) return;
   caseGrid.innerHTML = cases
     .map(
       (item) => `
@@ -252,6 +274,7 @@ function openCase(caseId) {
   renderUpgradeInventory();
   updateStats();
   persistState();
+  pushLiveDrop({ user: userState.name, caseName: selectedCase.name, itemName: newItem.name, price: dropValue });
   flash(`Вы получили ${newItem.name} и ${gainedXp} XP`);
 }
 
@@ -264,22 +287,43 @@ function updateStats() {
   const previousThreshold = (userState.level - 1) * 100;
   const progressValue = userState.xp - previousThreshold;
   const levelProgress = progressValue / (xpForNextLevel - previousThreshold || 1);
-  expProgress.style.width = `${Math.min(100, levelProgress * 100)}%`;
-  userExp.textContent = `${userState.xp} XP`;
-  userLevel.textContent = userState.level;
+  if (expProgress) {
+    expProgress.style.width = `${Math.min(100, levelProgress * 100)}%`;
+  }
+  if (userExp) {
+    userExp.textContent = `${userState.xp} XP`;
+  }
+  if (userLevel) {
+    userLevel.textContent = userState.level;
+  }
   const xpLeft = xpForNextLevel - progressValue;
-  nextLevel.textContent = xpLeft;
-  profileBalance.textContent = `$${userState.balance.toFixed(2)}`;
-  profileCases.textContent = userState.casesOpened;
-  profileUpgrades.textContent = userState.upgradesWon;
-  profileName.textContent = userState.name;
-  profileId.textContent = `ID ${userState.tradeCode}`;
-  headerUser.textContent = userState.name;
+  if (nextLevel) {
+    nextLevel.textContent = xpLeft;
+  }
+  if (profileBalance) {
+    profileBalance.textContent = `$${userState.balance.toFixed(2)}`;
+  }
+  if (profileCases) {
+    profileCases.textContent = userState.casesOpened;
+  }
+  if (profileUpgrades) {
+    profileUpgrades.textContent = userState.upgradesWon;
+  }
+  if (profileName) {
+    profileName.textContent = userState.name;
+  }
+  if (profileId) {
+    profileId.textContent = `ID ${userState.tradeCode}`;
+  }
+  if (headerUser) {
+    headerUser.textContent = userState.name;
+  }
   renderLeaderboard();
   renderAccountList();
 }
 
 function renderLeaderboard() {
+  if (!leaderboardList) return;
   const playerAccounts = Object.values(accounts).map((acc) => ({ name: acc.name, xp: acc.xp }));
   const combined = [...leaderboardBase, ...playerAccounts];
   combined.sort((a, b) => b.xp - a.xp);
@@ -298,6 +342,7 @@ function renderLeaderboard() {
 }
 
 function renderGiveaways() {
+  if (!giveawayGrid) return;
   giveawayGrid.innerHTML = giveaways
     .map(
       (item) => `
@@ -321,6 +366,7 @@ function renderGiveaways() {
 const timers = {};
 
 function startTimers() {
+  if (!giveawayGrid) return;
   giveaways.forEach((item) => {
     if (!timers[item.id]) {
       timers[item.id] = {
@@ -346,8 +392,12 @@ function updateTimer(id) {
   const timerEl = document.getElementById(`timer-${id}`);
   const participantsEl = document.getElementById(`participants-${id}`);
   const diff = Math.max(0, Math.floor((data.end - Date.now()) / 1000));
-  timerEl.textContent = formatDuration(diff);
-  participantsEl.textContent = `Участников: ${data.participants.size}`;
+  if (timerEl) {
+    timerEl.textContent = formatDuration(diff);
+  }
+  if (participantsEl) {
+    participantsEl.textContent = `Участников: ${data.participants.size}`;
+  }
 
   if (diff <= 0) {
     clearInterval(data.interval);
@@ -373,7 +423,7 @@ function pickWinner(id) {
   } else {
     const participants = Array.from(data.participants);
     const winner = participants[Math.floor(Math.random() * participants.length)];
-    winnersLog.prepend(createWinnerLog(id, winner));
+    winnersLog && winnersLog.prepend(createWinnerLog(id, winner));
     if (winner === userState.name) {
       userState.balance += 50;
       updateStats();
@@ -399,6 +449,7 @@ function createWinnerLog(id, winner) {
 }
 
 function renderUpgradeInventory() {
+  if (!upgradeInventory) return;
   const pool = userState.inventory.slice(0, 8);
   if (pool.length === 0) {
     upgradeInventory.innerHTML = '<p class="muted">Нет предметов</p>';
@@ -421,12 +472,15 @@ function renderUpgradeInventory() {
       const id = card.dataset.id;
       selectedItem = userState.inventory.find((item) => item.id === id) || null;
       renderUpgradeInventory();
-      upgradeStatus.textContent = selectedItem ? `Выбран ${selectedItem.name}` : 'Выберите предмет';
+      if (upgradeStatus) {
+        upgradeStatus.textContent = selectedItem ? `Выбран ${selectedItem.name}` : 'Выберите предмет';
+      }
     });
   });
 }
 
 function renderUpgradePool() {
+  if (!upgradePool) return;
   upgradePool.innerHTML = upgrades
     .map(
       (item) => `
@@ -441,6 +495,7 @@ function renderUpgradePool() {
 }
 
 function renderInventory(filter) {
+  if (!profileInventory) return;
   const activeFilter = filter || document.querySelector('.profile-tabs .chip.active')?.dataset.filter || 'all';
   const filtered = userState.inventory.filter((item) => (activeFilter === 'all' ? true : item.status === activeFilter));
   profileInventory.innerHTML =
@@ -457,6 +512,49 @@ function renderInventory(filter) {
       .join('') || '<p class="muted">Нет предметов</p>';
 }
 
+function pushLiveDrop({ user, caseName, itemName, price }) {
+  if (!liveFeed) return;
+  const row = document.createElement('div');
+  row.className = 'live-entry';
+  const formatted = typeof price === 'number' ? price.toFixed(2) : Number(price).toFixed(2);
+  row.innerHTML = `
+    <div>
+      <strong>${user}</strong>
+      <span>выбил ${itemName}</span>
+    </div>
+    <div class="live-meta">
+      <span>${caseName}</span>
+      <strong>$${formatted}</strong>
+    </div>
+  `;
+  liveFeed.prepend(row);
+  const maxRows = 10;
+  while (liveFeed.children.length > maxRows) {
+    liveFeed.removeChild(liveFeed.lastElementChild);
+  }
+}
+
+function mockLiveDrop() {
+  const dropCase = cases[Math.floor(Math.random() * cases.length)];
+  const player = liveNames[Math.floor(Math.random() * liveNames.length)];
+  const skin = liveSkins[Math.floor(Math.random() * liveSkins.length)];
+  const price = +(dropCase.price * (1.2 + Math.random() * 2)).toFixed(2);
+  return { user: player, caseName: dropCase.name, itemName: skin, price };
+}
+
+function seedLiveFeed() {
+  if (!liveFeed) return;
+  if (!liveFeed.dataset.ready) {
+    for (let i = 0; i < 6; i += 1) {
+      pushLiveDrop(mockLiveDrop());
+    }
+    liveFeed.dataset.ready = 'true';
+  }
+  setInterval(() => {
+    pushLiveDrop(mockLiveDrop());
+  }, 4500);
+}
+
 function flash(message) {
   const toast = document.createElement('div');
   toast.className = 'toast';
@@ -470,6 +568,7 @@ function flash(message) {
 }
 
 function handleUpgrade() {
+  if (!chanceRange || !chanceValue || !wheel || !balanceInputField) return;
   if (!selectedItem) {
     flash('Выберите предмет');
     return;
@@ -503,9 +602,13 @@ function handleUpgrade() {
     };
     userState.inventory.unshift(upgradedItem);
     userState.upgradesWon += 1;
-    upgradeStatus.textContent = `Успех! ${reward.name}`;
+    if (upgradeStatus) {
+      upgradeStatus.textContent = `Успех! ${reward.name}`;
+    }
   } else {
-    upgradeStatus.textContent = 'Неудача, попробуйте снова';
+    if (upgradeStatus) {
+      upgradeStatus.textContent = 'Неудача, попробуйте снова';
+    }
   }
   selectedItem = null;
   renderInventory();
@@ -514,12 +617,12 @@ function handleUpgrade() {
   persistState();
 }
 
-chanceRange.addEventListener('input', (e) => {
+chanceRange?.addEventListener('input', (e) => {
   chanceValue.textContent = `${e.target.value}%`;
 });
 
-upgradeBtn.addEventListener('click', handleUpgrade);
-openRandomBtn.addEventListener('click', () => openCase());
+upgradeBtn?.addEventListener('click', handleUpgrade);
+openRandomBtn?.addEventListener('click', () => openCase());
 
 copyTrade?.addEventListener('click', () => {
   navigator.clipboard.writeText(getTradeLink()).then(() => {
@@ -531,7 +634,7 @@ withdrawToggle?.addEventListener('change', (event) => {
   flash(event.target.checked ? 'Средства доступны к выводу' : 'Вывод заблокирован');
 });
 
-sellAllBtn.addEventListener('click', () => {
+sellAllBtn?.addEventListener('click', () => {
   const sold = userState.inventory.reduce((sum, item) => sum + Number(item.price), 0);
   userState.balance += sold;
   userState.inventory = [];
@@ -661,3 +764,4 @@ renderInventory();
 updateStats();
 persistState();
 startTimers();
+seedLiveFeed();
