@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkinHouse 2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="logo">Skin<span>House</span></div>
+      <nav class="main-nav">
+        <a href="#cases">Кейсы</a>
+        <a href="#leaderboard">Лидеры</a>
+        <a href="#giveaways">Розыгрыши</a>
+        <a href="#upgrade">Апгрейд</a>
+        <a href="#profile">Профиль</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn ghost" id="depositBtn">Пополнить</button>
+        <button class="user-chip" type="button" id="accountManager">
+          <span class="status online"></span>
+          <div>
+            <p class="user-name" id="headerUser">nox</p>
+            <small id="userExp">0 XP</small>
+          </div>
+          <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="avatar" />
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="cases">
+        <div>
+          <p class="eyebrow">Открой кейс и получи опыт</p>
+          <h1>Коллекции CS2 с мгновенным апгрейдом</h1>
+          <p class="muted">Современный интерфейс, честная статистика и живая экономика. Мы не просто копируем дизайн, а создаем полноценный продукт для кейсеров.</p>
+          <div class="hero-actions">
+            <button class="btn primary" id="openRandom">Открыть случайный кейс</button>
+            <button class="btn secondary">Каталог кейсов</button>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>Прогресс опыта</h3>
+          <p>Откройте кейсы, чтобы подняться в топе</p>
+          <div class="progress">
+            <span id="expProgress"></span>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <small>Текущий уровень</small>
+              <p id="userLevel">1</p>
+            </div>
+            <div>
+              <small>Опыта до следующего</small>
+              <p id="nextLevel">100</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-grid-wrapper">
+        <header class="section-head">
+          <h2>Фирменные кейсы</h2>
+          <div class="filters">
+            <button class="chip active">Топовые</button>
+            <button class="chip">Новые</button>
+            <button class="chip">Коллекции CS2</button>
+          </div>
+        </header>
+        <div class="case-grid" id="caseGrid"></div>
+      </section>
+
+      <section class="panel" id="leaderboard">
+        <header class="section-head">
+          <div>
+            <p class="eyebrow">Лидеры по опыту</p>
+            <h2>Лидерборд</h2>
+          </div>
+          <button class="btn secondary">Подробнее</button>
+        </header>
+        <div class="leaderboard" id="leaderboardList"></div>
+      </section>
+
+      <section class="panel" id="giveaways">
+        <header class="section-head">
+          <div>
+            <p class="eyebrow">Розыгрыши</p>
+            <h2>$11 440 прямо сейчас</h2>
+          </div>
+          <div class="filters">
+            <button class="chip active">Все</button>
+            <button class="chip">VIP</button>
+            <button class="chip">Для новичков</button>
+          </div>
+        </header>
+        <div class="giveaway-grid" id="giveawayGrid"></div>
+        <div class="winners" id="winnersLog"></div>
+      </section>
+
+      <section class="panel" id="upgrade">
+        <header class="section-head">
+          <div>
+            <p class="eyebrow">Апгрейд</p>
+            <h2>Меняй вещи и баланс</h2>
+          </div>
+          <button class="btn secondary">История</button>
+        </header>
+        <div class="upgrade-layout">
+          <div class="upgrade-column">
+            <h3>Выбери предмет</h3>
+            <div class="inventory" id="upgradeInventory"></div>
+            <div class="balance-input">
+              <label>Добавить баланс</label>
+              <input type="number" id="balanceInput" value="0" min="0" step="5" />
+            </div>
+            <div class="chance-control">
+              <label for="chanceRange">Шанс</label>
+              <input type="range" id="chanceRange" min="1" max="100" value="50" />
+              <span id="chanceValue">50%</span>
+            </div>
+            <button class="btn primary" id="upgradeBtn">Апгрейдить</button>
+            <p class="muted" id="upgradeStatus">Выберите предмет</p>
+          </div>
+          <div class="upgrade-wheel">
+            <div class="wheel" id="wheel">
+              <ul>
+                <li>USP | Printstream</li>
+                <li>AK-47 | Headshot</li>
+                <li>M4A4 | Temukau</li>
+                <li>AWP | Chromatic</li>
+                <li>AK-47 | Ice Coaled</li>
+                <li>M4A1-S | Hot Rod</li>
+              </ul>
+            </div>
+            <div class="wheel-indicator"></div>
+          </div>
+          <div class="upgrade-column">
+            <h3>Доступные апгрейды</h3>
+            <div class="upgrade-pool" id="upgradePool"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel profile" id="profile">
+        <header class="section-head">
+          <div>
+            <p class="eyebrow">Профиль</p>
+            <h2>Вещи и статистика</h2>
+          </div>
+          <button class="btn secondary">Редактировать</button>
+        </header>
+        <div class="profile-grid">
+          <div class="profile-card">
+            <div class="profile-user">
+              <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="avatar" />
+              <div>
+                <h3 id="profileName">nox</h3>
+                <p id="profileId">ID 42069</p>
+                <button class="link" id="copyTrade">Скопировать трейд ссылку</button>
+              </div>
+            </div>
+            <div class="stat-row">
+              <span>Баланс</span>
+              <strong id="profileBalance">$0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Открыто кейсов</span>
+              <strong id="profileCases">0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Удачные апгрейды</span>
+              <strong id="profileUpgrades">0</strong>
+            </div>
+            <div class="toggle-row">
+              <span>Доступно к выводу</span>
+              <label class="switch">
+                <input type="checkbox" id="withdrawToggle" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="profile-card wide">
+            <div class="profile-tabs">
+              <button class="chip active" data-filter="all">Все</button>
+              <button class="chip" data-filter="sold">Проданы</button>
+              <button class="chip" data-filter="traded">Обменяны</button>
+              <button class="chip" data-filter="upgraded">Апгрейд</button>
+              <button class="chip" data-filter="withdrawn">Выведено</button>
+            </div>
+            <div class="inventory" id="profileInventory"></div>
+            <button class="btn ghost" id="sellAll">Продать всё</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 SkinHouse. Все права защищены.</p>
+      <div class="footer-links">
+        <a href="#">Пользовательское соглашение</a>
+        <a href="#">Служба поддержки</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal" id="accountModal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" data-close-modal>&times;</button>
+      <h3>Управление аккаунтом</h3>
+      <p class="muted">Создавайте аккаунты для друзей, сохраняйте прогресс и переключайтесь за один клик.</p>
+      <div class="modal-tabs" role="tablist">
+        <button class="chip active" data-tab="login">Войти</button>
+        <button class="chip" data-tab="register">Регистрация</button>
+      </div>
+      <form id="loginForm" class="modal-form" autocomplete="off">
+        <label>
+          Никнейм
+          <input type="text" id="loginName" required placeholder="Например, nox" />
+        </label>
+        <label>
+          Пароль
+          <input type="password" id="loginPassword" required placeholder="••••••" />
+        </label>
+        <button class="btn primary" type="submit">Войти</button>
+      </form>
+      <form id="registerForm" class="modal-form hidden" autocomplete="off">
+        <label>
+          Никнейм
+          <input type="text" id="registerName" required minlength="3" maxlength="16" />
+        </label>
+        <label>
+          Пароль
+          <input type="password" id="registerPassword" required minlength="4" />
+        </label>
+        <label>
+          Повторите пароль
+          <input type="password" id="registerConfirm" required minlength="4" />
+        </label>
+        <button class="btn primary" type="submit">Создать аккаунт</button>
+      </form>
+      <div class="divider"></div>
+      <h4>Сохранённые аккаунты</h4>
+      <div class="account-list" id="accountList"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="depositModal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" data-close-modal>&times;</button>
+      <h3>Пополнение баланса</h3>
+      <form id="depositForm" class="modal-form">
+        <label>
+          Сумма пополнения
+          <input type="number" id="depositAmount" min="1" step="1" value="25" required />
+        </label>
+        <label>
+          Способ оплаты
+          <select id="depositMethod">
+            <option value="card">Банковская карта</option>
+            <option value="crypto">Криптовалюта</option>
+            <option value="skin">Оплата скинами</option>
+          </select>
+        </label>
+        <label>
+          Комментарий
+          <textarea id="depositComment" rows="2" placeholder="Например, пополнение к розыгрышу"></textarea>
+        </label>
+        <button class="btn primary" type="submit">Пополнить</button>
+      </form>
+      <div class="muted" id="depositHint">Платеж защищён. Средства моментально приходят на баланс аккаунта.</div>
+    </div>
+  </div>
+
+  <script src="script.js" type="module"></script>
+</body>
+</html>
